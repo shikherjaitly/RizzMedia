@@ -8,12 +8,13 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
-import userRoutes from "./routes/users.js";
-import authRoutes from "./routes/auth.js";
-import postRoutes from "./posts/posts.js";
+import apiRoutes from "./routes/index.js";
+// import authRoutes from "./routes/auth.js";
+// import postRoutes from "./routes/posts.js";
 import { createPosts } from "./controllers/posts.js"
 import { register } from "./controllers/auth.js";
 import { verifyToken } from "./middleware/auth.js";
+
 
 // Configuration 
 const __filename = fileURLToPath(import.meta.url);
@@ -48,9 +49,12 @@ app.post("/posts", verifyToken,upload.single("picture"), createPosts)
 
 
 /*Routes*/
-app.use("/auth", authRoutes);
-app.use("/users", userRoutes);
-app.use("/posts", postRoutes);
+app.use("/api", apiRoutes);
+// app.use("/users", userRoutes);
+// app.use("/posts", postRoutes);
+app.use("/",(req,res) => {
+    res.send({msg:"message"})
+})
 
 /*Mongoose setup */
 
@@ -61,4 +65,4 @@ mongoose.connect(process.env.MONGO_URL, {
 }).then(() => {
     app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
 
-}).catch((error) => console.log(`${error} did not connect`));
+}).catch((err) => console.log(`${err} did not connect`));

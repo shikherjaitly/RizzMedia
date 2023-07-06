@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt" ;
 import jwt from "jsonwebtoken";
-import User from "../models/User.js";
+import User from "../models/Users.js";
 
 // Register User 
 export const register = async(req, res) => {
@@ -37,13 +37,14 @@ export const register = async(req, res) => {
 
 
     } catch (err) {
-        res.status(500).json({error: err.message });
+        res.status(500).json({err: err.message });
     }
 };
 
 /*LOGGING IN */
 export const  login = async ( req, res) => {
     try {
+        res.status(200).json({msg:"login msg"});
         const { email,password } = req.body;
         const user = await User.findOne({email: email });
         
@@ -59,7 +60,7 @@ export const  login = async ( req, res) => {
         delete user.password;
         req.status(200).json({ token,user});
 
-    } catch (error) {
-        res.status(500).json({error: err.message });
+    } catch (err) {
+        res.status(500).json({message: err.message });
     }
 };
